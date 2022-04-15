@@ -1,0 +1,46 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+nav {
+  display: flex;
+  padding: 8px;
+  background-color: white;
+  font-size: 25px;
+  align-items: center;
+  font-weight: bolder;
+  justify-content: space-between;
+  box-shadow: rgba(0,0,0,0.09) 0px 2px 24px 0px;
+}
+a {
+  color: black;
+  text-decoration: none;
+}
+nav .logo {
+    margin: 0px 10px;
+    font-family: 'Pacifico', cursive;
+    font-weight: 300;
+}
+nav .logo a{
+    font-family: 'Pacifico', cursive;
+}
+nav a {
+    margin: 0px 10px;
+  font-family: "Montserrat", sans-serif;
+}
+nav input{
+    padding: 9px 0px 9px 35px;
+    width: 100%;
+    border: 2px solid black;
+}
+nav .search svg{
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    color: grey;
+}
+nav .search{
+    width: 40%;
+    position: relative;
+}
