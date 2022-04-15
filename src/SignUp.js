@@ -1,32 +1,35 @@
 import {useState } from "react"
-import { Link } from "react-router-dom"
+import { Link ,useNavigate} from "react-router-dom"
 
 const Signup = ({setIsLoggedIn}) => {
+    const navigate=useNavigate()
     const [loading, setLoading] = useState(false)
-    const [form, setForm] = useState({ name: '', password: '', email: '', address: '', phone: '',userLevel:0 })
+    const [form, setForm] = useState({ name: '', password: '', email: '', address: '', phone: ''})
    
-    const handleSubmit = async (e) => {
-        setLoading(true)
+    const handleSubmit= async (e)=>{
         e.preventDefault()
-        const res = await fetch("https://survey-app-backend-1234.herokuapp.com/signup", {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify({...form})
-        })
-        const result = await res.json()
-        console.log(result);
-        if (!result.id) {
-            window.alert(result.message)
+        const {name,password,email,phone,address}=form
+        console.log("Hello");
+        console.log(email);
+        const url="http://localhost:8000/signup"
+        const response = await fetch(url, {
+          method: 'POST', 
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          
+          body: JSON.stringify({name,email,password,phone,address}) 
+        });
+        const json=await response.json();
+        console.log(json);
+        if(json.success){
+          alert(`Welcome ${json.user.name}`);
+          navigate('/');
+          setIsLoggedIn(true)
+        }else{
+          alert(`${json.error}`)
         }
-        else {
-            localStorage.setItem('token', result?.token)
-            localStorage.setItem('following', JSON.stringify(result?.following))
-            setIsLoggedIn(true)
-        }
-        setLoading(false)
-    }
+      }
     const formControl = (e) => {
         const { name, value } = e.target
         setForm((prev) => { return ({ ...prev, [name]: value }) })

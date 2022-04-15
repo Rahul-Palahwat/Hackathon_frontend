@@ -1,34 +1,44 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link ,useNavigate} from "react-router-dom"
 const Login = ({setIsLoggedIn}) => {
+const navigate=useNavigate()
+
     const [form, setForm] = useState({  password: '', email: '' })
     const [loading, setLoading] = useState(false)
     const formControl = (e) => {
         const { name, value } = e.target
         setForm((prev) => { return ({ ...prev, [name]: value }) })
     }
-    const handleSubmit = async (e) => {
-        setLoading(true)
+    const handleSubmit= async (e)=>{
         e.preventDefault()
-        const res = await fetch("https://survey-app-backend-1234.herokuapp.com/signin", {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify({...form})
-        })
-        const result = await res.json()
-        // console.log(result);
-        if (!result.id) {
-            window.alert(result.message)
+        const {email,password}=form
+        try {
+        console.log("Hello");
+        console.log(email);
+        const url="http://localhost:8000/login"
+        const response = await fetch(url, {
+          method: 'POST', 
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          
+          body: JSON.stringify({email,password}) 
+        });
+        const json=await response.json();
+        console.log(json);
+        if(json.success){
+          
+          navigate('/user');
+          alert(`Welcome ${json.user.name}`);
+        }else{
+          console.log("I am else");
+          alert(`${json.error}`)
         }
-        else {
-            localStorage.setItem('token', result?.token)
-            localStorage.setItem('following', JSON.stringify(result?.following))
-            setIsLoggedIn(true)
-        }
-        setLoading(false)
-    }
+      } catch (error) {
+        console.log("Internal server Error");
+          
+      }
+      }
     return (
         <div>
             <h1 align="center" className="my-5">Login</h1>
